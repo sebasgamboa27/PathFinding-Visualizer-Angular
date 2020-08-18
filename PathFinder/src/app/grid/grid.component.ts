@@ -11,6 +11,8 @@ export class GridComponent implements OnInit {
   board: NodeComponent[][] = [];
   startX: number = 5;
   startY: number = 5;
+  endX: number = 20;
+  endY: number = 20;
 
   constructor() { 
 
@@ -31,12 +33,16 @@ export class GridComponent implements OnInit {
           debugger;
           this.board[i][j].isStart = true;
         }
-        
+        else if(i === this.endX && j === this.endY){
+          debugger;
+          this.board[i][j].isFinish = true;
+        }
       }   
     }
   }
 
-  showBoard(){
+  showBoard(numbers: number[]){
+    this.board[numbers[0]][numbers[1]].isWall = true;
     console.log(this.board);
   }
 

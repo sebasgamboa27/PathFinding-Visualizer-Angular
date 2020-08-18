@@ -1,5 +1,6 @@
 <main>
   <div *ngFor="let column of board; index as i" class="row">
-    <app-node *ngFor="let node of column; index as j" [i]="i" [j]="j" (send)="showBoard()"></app-node>
+    <app-node *ngFor="let node of column; index as j" [i]="i" [j]="j" [isFinish]="node.isFinish" [isStart]="node.isStart"
+    [isWall]="node.isWall" [visited]="node.visited" [previousNode]="node.previousNode" (send)="showBoard($event)"></app-node>
   </div>
 </main>

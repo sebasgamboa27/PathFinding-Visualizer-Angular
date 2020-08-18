@@ -7,33 +7,26 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 })
 export class NodeComponent implements OnInit {
 
-  visited: boolean = false;
-  isStart: boolean = false;
-  isFinish: boolean = false;
-  isWall: boolean = false;
+  @Input() visited: boolean = false;
+  @Input() isStart: boolean = false;
+  @Input() isFinish: boolean = false;
+  @Input() isWall: boolean = false;
   @Input() i: number;
   @Input() j:number;
-  previousNode: Node;
+  @Input() previousNode: Node;
+  @Input() isPath: boolean = false;
 
-  @Output() send = new EventEmitter<boolean>();
+  @Output() send = new EventEmitter<number[]>();
 
   constructor() { 
   }
 
   ngOnInit(): void {
-    if(this.i === 5 && this.j === 5){
-      this.isStart = true;
-    }
-    else if(this.i === 20 && this.j === 20){
-      this.isFinish = true;
-    }
   }
 
   makeWall(){
-    console.log('si');
-    debugger;
     this.isWall = true;
-    this.send.emit(true);
+    this.send.emit([this.i,this.j]);
   }
 
 }
