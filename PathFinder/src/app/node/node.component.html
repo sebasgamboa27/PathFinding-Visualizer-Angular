@@ -1,1 +1,7 @@
-<p>node works!</p>
+<button type="button" class="btn"
+[class.btn-warning]="isStart"
+[class.btn-secondary]="!visited && !isFinish && !isStart && !isWall"
+[class.btn-success]="isFinish"
+[class.btn-primary]="visited"
+[class.btn-dark]="isWall"
+(click)="makeWall()"></button>

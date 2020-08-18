@@ -1,1 +1,5 @@
-<p>grid works!</p>
+<main>
+  <div *ngFor="let column of board; index as i" class="row">
+    <app-node *ngFor="let node of column; index as j" [i]="i" [j]="j" (send)="showBoard()"></app-node>
+  </div>
+</main>
