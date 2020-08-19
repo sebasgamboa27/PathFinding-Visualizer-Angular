@@ -1,8 +1,10 @@
 <button type="button" class="btn"
-[class.btn-warning]="isStart"
+[class.btn-danger]="isStart"
 [class.btn-secondary]="!animated && !isFinish && !isStart && !isWall && !isPath"
 [class.btn-success]="isFinish"
 [class.btn-primary]="!isPath && animated"
+[class.node-visited]="!isPath && animated"
 [class.btn-dark]="isWall"
-[class.btn-danger]="isPath && !isStart && !isFinish"
+[class.btn-warning]="isPath && !isStart && !isFinish"
+[class.node-isPath]="isPath && !isStart && !isFinish"
 (mousedown)="makeWallDown()" (mouseover)="makeWallEnter(false)" (mouseup)="makeWallUp()"></button>
