@@ -53,13 +53,38 @@ export class GridComponent implements OnInit {
     console.log(visitedNodesInOrder);
     const nodesInShortestPathOrder = this.getNodesInShortestPathOrder(this.board[this.endX][this.endY]);
     console.log(nodesInShortestPathOrder); 
-    this.showCorrectPath(nodesInShortestPathOrder);
+    //this.showCorrectPath(nodesInShortestPathOrder);
+    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
   }
 
   showCorrectPath(nodes:NodeComponent[]){
     nodes.forEach(node => {
       node.isPath = true;
     });
+  }
+
+  animateDijkstra(visitedNodesInOrder:NodeComponent[], nodesInShortestPathOrder:NodeComponent[]) {
+    for (let i = 0; i <= visitedNodesInOrder.length; i++) {
+      if (i === visitedNodesInOrder.length) {
+        setTimeout(() => {
+          this.animateShortestPath(nodesInShortestPathOrder);
+        }, 10 * i);
+        return;
+      }
+      setTimeout(() => {
+        const node = visitedNodesInOrder[i];
+        node.animated = true;
+      }, 10 * i);
+    }
+  }
+
+  animateShortestPath(nodesInShortestPathOrder: NodeComponent[]) {
+    for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
+      setTimeout(() => {
+        const node = nodesInShortestPathOrder[i];
+        node.isPath = true;
+      }, 50 * i);
+    }
   }
 
   dijkstra(grid: NodeComponent[][], startNode: NodeComponent, finishNode: NodeComponent) {

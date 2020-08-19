@@ -8,6 +8,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 export class NodeComponent implements OnInit {
 
   @Input() visited: boolean = false;
+  @Input() animated: boolean = false;
   @Input() isStart: boolean = false;
   @Input() isFinish: boolean = false;
   @Input() isWall: boolean = false;

@@ -1,8 +1,13 @@
-<button id="dijkstra" type="button" class="btn btn-primary btn-lg mt-3 ml-3" (click)="showDijkstra()">Dijkstra</button>
+<nav class="navbar navbar-info bg-info">
+  <span class="navbar-brand mb-0 h1">&nbsp; &nbsp; &nbsp; &nbsp; Welcome! Make walls, and find the shortest path between two points!</span>
+</nav>
+<div id="button">
+  <button id="dijkstra" type="button" class="btn btn-primary btn-lg mt-4 ml-3" (click)="showDijkstra()">Dijkstra</button>
+</div>
 <main>
   <div *ngFor="let column of board" class="row">
     <app-node *ngFor="let node of column" [i]="node.i" [j]="node.j" [isFinish]="node.isFinish" [isStart]="node.isStart"
     [isWall]="node.isWall" [visited]="node.visited" [previousNode]="node.previousNode" [distance]="node.distance" [isPath]="node.isPath"
-    (send)="showBoard($event)"></app-node>
+    [animated]="node.animated" (send)="showBoard($event)"></app-node>
   </div>
 </main>
