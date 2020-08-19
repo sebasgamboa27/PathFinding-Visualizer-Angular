@@ -12,8 +12,15 @@ export class NodeComponent implements OnInit {
   @Input() isStart: boolean = false;
   @Input() isFinish: boolean = false;
   @Input() isWall: boolean = false;
+
   @Input() i: number;
   @Input() j:number;
+
+  @Input() f: number = 0;
+  @Input() g:number = 0;
+  @Input() h:number = 0;
+  @Input() neighbors: NodeComponent[] = [];
+
   @Input() previousNode: NodeComponent = null;
   @Input() isPath: boolean = false;
   @Input() distance: number = Infinity;
@@ -31,9 +38,11 @@ export class NodeComponent implements OnInit {
   }
 
   makeWallDown(){
-    this.mouse.emit(true);
-    this.isWall = true;
-    this.send.emit([this.i,this.j]);
+    if(!this.isWall){
+      this.mouse.emit(true);
+      this.isWall = true;
+      this.send.emit([this.i,this.j]);
+    }
   }
 
   makeWallEnter(){
@@ -48,6 +57,23 @@ export class NodeComponent implements OnInit {
     this.mouse.emit(false);
     this.isWall = true;
     this.send.emit([this.i,this.j]);
+  }
+
+  addNeighbors(grid: NodeComponent[][]) {
+    var i = this.i;
+    var j = this.j;
+    if (i < 25 - 1) {
+      this.neighbors.push(grid[i + 1][j]);
+    }
+    if (i > 0) {
+      this.neighbors.push(grid[i - 1][j]);
+    }
+    if (j < 40 - 1) {
+      this.neighbors.push(grid[i][j + 1]);
+    }
+    if (j > 0) {
+      this.neighbors.push(grid[i][j - 1]);
+    }
   }
 
 }

@@ -2,13 +2,15 @@
   <span class="navbar-brand mb-0 h1">&nbsp; &nbsp; &nbsp; &nbsp; Welcome! Make walls, and find the shortest path between two points!</span>
   <button type="button" class="btn btn-dark" (click)="clearBoard()">Clear</button>
 </nav>
-<div id="button">
-  <button type="button" class="btn btn-primary btn-lg mt-4 ml-3" (click)="showDijkstra()">Dijkstra</button>
+<div id="button" class="row">
+  <button type="button" class="btn btn-primary btn-lg mt-4 ml-3" (click)="showDijkstra()">Dijkstra Algorithm</button>
+  <button type="button" class="btn btn-primary btn-lg mt-4 ml-3" (click)="showAStar()">A Star Algorithm</button>
 </div>
 <main>
   <div *ngFor="let column of board" class="row">
     <app-node *ngFor="let node of column" [i]="node.i" [j]="node.j" [isFinish]="node.isFinish" [isStart]="node.isStart"
     [isWall]="node.isWall" [visited]="node.visited" [previousNode]="node.previousNode" [distance]="node.distance" [isPath]="node.isPath"
-    [animated]="node.animated" [mousePressed]="mouseState" (send)="showBoard($event)" (mouse)="changeMouse($event)"></app-node>
+    [animated]="node.animated" [mousePressed]="mouseState" [f]="node.f" [g]="node.g" [h]="node.h" [neighbors]="node.neighbors"
+    (send)="showBoard($event)" (mouse)="changeMouse($event)"></app-node>
   </div>
 </main>

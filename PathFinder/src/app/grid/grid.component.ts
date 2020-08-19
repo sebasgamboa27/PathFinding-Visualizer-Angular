@@ -15,6 +15,9 @@ export class GridComponent implements OnInit {
   endY: number = 35;
   mouseState: boolean = false;
 
+  openSet: NodeComponent[] = [];
+  closedSet: NodeComponent[] = [];
+
   constructor() { 
 
     for (let i = 0; i < 25; i++) {
@@ -46,6 +49,8 @@ export class GridComponent implements OnInit {
 
   clearBoard(){
     this.board = [];
+    this.closedSet = [];
+    this.openSet = [];
 
     for (let i = 0; i < 25; i++) {
       let temp = []
@@ -90,6 +95,15 @@ export class GridComponent implements OnInit {
     this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
   }
 
+  showAStar(){
+    const end = this.aStar(this.board[this.startX][this.startY], this.board[this.endX][this.endY]);
+    const nodesInShortestPathOrder = this.getNodesInShortestPathOrder(this.board[this.endX][this.endY]);
+    console.log(nodesInShortestPathOrder); 
+    console.log(this.closedSet);
+    this.animateAStar(nodesInShortestPathOrder);
+    //this.showAStarPath();
+  }
+
   showCorrectPath(nodes:NodeComponent[]){
     nodes.forEach(node => {
       node.isPath = true;
@@ -108,6 +122,27 @@ export class GridComponent implements OnInit {
         const node = visitedNodesInOrder[i];
         node.animated = true;
       }, 10 * i);
+    }
+  }
+
+  animateAStar( nodesInShortestPathOrder:NodeComponent[]) {
+    for (let i = 0; i <= this.closedSet.length; i++) {
+      if (i === this.closedSet.length) {
+        setTimeout(() => {
+          this.animateShortestPath(nodesInShortestPathOrder);
+        }, 10 * i);
+        return;
+      }
+      setTimeout(() => {
+        const node = this.closedSet[i];
+        node.animated = true;
+      }, 10 * i);
+    }
+  }
+
+  showAStarPath(){
+    for (var i = 0; i < this.openSet.length; i++) {
+      this.openSet[i].animated = true;
     }
   }
 
@@ -185,6 +220,93 @@ export class GridComponent implements OnInit {
       currentNode = currentNode.previousNode;
     }
     return nodesInShortestPathOrder;
+  }
+
+  removeFromArray(arr, elt) {
+    // Could use indexOf here instead to be more efficient
+    for (var i = arr.length - 1; i >= 0; i--) {
+      if (arr[i] == elt) {
+        arr.splice(i, 1);
+      }
+    }
+  }
+
+
+  aStar(start: NodeComponent, end:NodeComponent){
+    for (var i = 0; i < 25; i++) {
+      for (var j = 0; j < 40; j++) {
+        this.board[i][j].addNeighbors(this.board);
+      }
+    }
+
+    this.openSet.push(start);
+
+    //Starts algorithm
+
+    while (this.openSet.length > 0) {
+
+      // Best next option
+      var winner = 0;
+      for (var i = 0; i < this.openSet.length; i++) {
+        if (this.openSet[i].f < this.openSet[winner].f) {
+          winner = i;
+        }
+      }
+      var current = this.openSet[winner];
+  
+      // Did I finish?
+      if (current === end) {
+        console.log("DONE!");
+        return current;
+      }
+  
+      // Best option moves from openSet to closedSet
+      this.removeFromArray(this.openSet, current);
+      this.closedSet.push(current);
+  
+      // Check all the neighbors
+      var neighbors = current.neighbors;
+      for (var i = 0; i < neighbors.length; i++) {
+        var neighbor = neighbors[i];
+  
+        // Valid next spot?
+        if (!this.closedSet.includes(neighbor) && !neighbor.isWall) {
+          var tempG = current.g + this.heuristic(neighbor, current);
+  
+          // Is this a better path than before?
+          var newPath = false;
+          if (this.openSet.includes(neighbor)) {
+            if (tempG < neighbor.g) {
+              neighbor.g = tempG;
+              newPath = true;
+            }
+          } else {
+            neighbor.g = tempG;
+            newPath = true;
+            this.openSet.push(neighbor);
+          }
+  
+          // Yes, it's a better path
+          if (newPath) {
+            debugger;
+            neighbor.h = this.heuristic(neighbor, end);
+            neighbor.f = neighbor.g + neighbor.h;
+            neighbor.previousNode = current;
+          }
+        }
+  
+      }
+      // Uh oh, no solution
+    } 
+    return null;
+
+  }
+
+  heuristic(a, b) {
+    //var d = dist(a.i, a.j, b.i, b.j);
+    //var d = Math.abs(a.i - b.i) + Math.abs(a.j - b.j);
+    let d = Math.sqrt( Math.pow((a.i-b.i), 2) + Math.pow((a.j-b.j), 2) );
+    return d;
   }
 
 }
