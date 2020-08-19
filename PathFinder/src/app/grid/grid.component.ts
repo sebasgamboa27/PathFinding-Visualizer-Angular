@@ -77,6 +77,40 @@ export class GridComponent implements OnInit {
     }
   }
 
+  clearBoardWalls(){
+    let oldBoard = this.board;
+    this.board = [];
+    this.closedSet = [];
+    this.openSet = [];
+
+    for (let i = 0; i < 25; i++) {
+      let temp = []
+      for (let j = 0; j < 40; j++) {
+        const newNode = new NodeComponent();
+        newNode.i = i;
+        newNode.j = j;
+        if(oldBoard[i][j].isWall){
+          newNode.isWall = true;
+        }
+        temp.push(newNode);
+      }
+      this.board.push(temp);
+    }
+
+    for (let i = 0; i < this.board.length; i++) {
+      for (let j = 0; j < this.board[i].length; j++) {
+        if(i === this.startX && j === this.startY){
+          debugger;
+          this.board[i][j].isStart = true;
+        }
+        else if(i === this.endX && j === this.endY){
+          debugger;
+          this.board[i][j].isFinish = true;
+        }
+      }   
+    }
+  }
+
   changeMouse(state: boolean){
     this.mouseState = state;
   }

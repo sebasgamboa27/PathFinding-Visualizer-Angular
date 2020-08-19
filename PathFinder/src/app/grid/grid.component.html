@@ -1,6 +1,7 @@
 <nav class="navbar navbar-info bg-info">
   <span class="navbar-brand mb-0 h1">&nbsp; &nbsp; &nbsp; &nbsp; Welcome! Make walls, and find the shortest path between two points!</span>
-  <button type="button" class="btn btn-dark" (click)="clearBoard()">Clear</button>
+  <button type="button" class="btn btn-dark" (click)="clearBoardWalls()">Clear without walls</button>
+  <button type="button" class="btn btn-dark" (click)="clearBoard()">Clear All</button>
 </nav>
 <div id="button" class="row">
   <button type="button" class="btn btn-primary btn-lg mt-4 ml-3" (click)="showDijkstra()">Dijkstra Algorithm</button>
