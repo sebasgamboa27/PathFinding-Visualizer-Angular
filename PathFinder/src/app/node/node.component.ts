@@ -13,8 +13,9 @@ export class NodeComponent implements OnInit {
   @Input() isWall: boolean = false;
   @Input() i: number;
   @Input() j:number;
-  @Input() previousNode: Node;
+  @Input() previousNode: NodeComponent = null;
   @Input() isPath: boolean = false;
+  @Input() distance: number = Infinity;
 
   @Output() send = new EventEmitter<number[]>();
 

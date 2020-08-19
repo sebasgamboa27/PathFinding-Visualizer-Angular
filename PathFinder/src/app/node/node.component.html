@@ -1,7 +1,8 @@
 <button type="button" class="btn"
 [class.btn-warning]="isStart"
-[class.btn-secondary]="!visited && !isFinish && !isStart && !isWall"
+[class.btn-secondary]="!visited && !isFinish && !isStart && !isWall && !isPath"
 [class.btn-success]="isFinish"
-[class.btn-primary]="visited"
+[class.btn-primary]="!isPath && visited"
 [class.btn-dark]="isWall"
+[class.btn-danger]="isPath && !isStart && !isFinish"
 (click)="makeWall()"></button>

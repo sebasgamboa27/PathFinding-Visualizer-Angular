@@ -1,6 +1,8 @@
+<button id="dijkstra" type="button" class="btn btn-primary btn-lg mt-3 ml-3" (click)="showDijkstra()">Dijkstra</button>
 <main>
-  <div *ngFor="let column of board; index as i" class="row">
-    <app-node *ngFor="let node of column; index as j" [i]="i" [j]="j" [isFinish]="node.isFinish" [isStart]="node.isStart"
-    [isWall]="node.isWall" [visited]="node.visited" [previousNode]="node.previousNode" (send)="showBoard($event)"></app-node>
+  <div *ngFor="let column of board" class="row">
+    <app-node *ngFor="let node of column" [i]="node.i" [j]="node.j" [isFinish]="node.isFinish" [isStart]="node.isStart"
+    [isWall]="node.isWall" [visited]="node.visited" [previousNode]="node.previousNode" [distance]="node.distance" [isPath]="node.isPath"
+    (send)="showBoard($event)"></app-node>
   </div>
 </main>
