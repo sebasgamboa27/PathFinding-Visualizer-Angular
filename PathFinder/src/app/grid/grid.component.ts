@@ -12,14 +12,14 @@ export class GridComponent implements OnInit {
   startX: number = 5;
   startY: number = 5;
   endX: number = 20;
-  endY: number = 20;
+  endY: number = 35;
   mouseState: boolean = false;
 
   constructor() { 
 
     for (let i = 0; i < 25; i++) {
       let temp = []
-      for (let j = 0; j < 25; j++) {
+      for (let j = 0; j < 40; j++) {
         const newNode = new NodeComponent();
         newNode.i = i;
         newNode.j = j;
