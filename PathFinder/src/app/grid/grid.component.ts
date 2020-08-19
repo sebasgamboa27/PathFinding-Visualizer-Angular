@@ -82,7 +82,12 @@ export class GridComponent implements OnInit {
   }
 
   showBoard(numbers: number[]){
-    this.board[numbers[0]][numbers[1]].isWall = true;
+    if(this.board[numbers[0]][numbers[1]].isWall){
+      this.board[numbers[0]][numbers[1]].isWall = false;
+    }
+    else{
+      this.board[numbers[0]][numbers[1]].isWall = true;
+    }
     console.log(this.board);
   }
   

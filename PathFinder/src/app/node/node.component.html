@@ -5,4 +5,4 @@
 [class.btn-primary]="!isPath && animated"
 [class.btn-dark]="isWall"
 [class.btn-danger]="isPath && !isStart && !isFinish"
-(mousedown)="makeWallDown()" (mousemove)="makeWallEnter()" (mouseup)="makeWallUp()"></button>
+(mousedown)="makeWallDown()" (mouseover)="makeWallEnter(false)" (mouseup)="makeWallUp()"></button>

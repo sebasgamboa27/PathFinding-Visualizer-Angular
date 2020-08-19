@@ -38,25 +38,29 @@ export class NodeComponent implements OnInit {
   }
 
   makeWallDown(){
-    if(!this.isWall){
-      this.mouse.emit(true);
-      this.isWall = true;
-      this.send.emit([this.i,this.j]);
-    }
+
+    this.mouse.emit(true);
+    this.makeWallEnter(true);
+
   }
 
-  makeWallEnter(){
-    if(this.mousePressed){
-      debugger;
-      this.isWall = true;
+  makeWallEnter(state: boolean){
+    debugger;
+    if(this.mousePressed || state){
+
+      if(!this.isWall){
+        this.isWall = true;
+      }
+      else{
+        this.isWall = false;
+      }
       this.send.emit([this.i,this.j]);
     }
   }
 
   makeWallUp(){
+
     this.mouse.emit(false);
-    this.isWall = true;
-    this.send.emit([this.i,this.j]);
   }
 
   addNeighbors(grid: NodeComponent[][]) {
