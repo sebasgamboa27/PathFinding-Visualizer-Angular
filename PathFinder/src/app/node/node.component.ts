@@ -18,6 +18,10 @@ export class NodeComponent implements OnInit {
   @Input() isPath: boolean = false;
   @Input() distance: number = Infinity;
 
+  @Input() mousePressed: boolean = false;
+  @Output() mouse = new EventEmitter<boolean>();
+
+
   @Output() send = new EventEmitter<number[]>();
 
   constructor() { 
@@ -26,7 +30,22 @@ export class NodeComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  makeWall(){
+  makeWallDown(){
+    this.mouse.emit(true);
+    this.isWall = true;
+    this.send.emit([this.i,this.j]);
+  }
+
+  makeWallEnter(){
+    if(this.mousePressed){
+      debugger;
+      this.isWall = true;
+      this.send.emit([this.i,this.j]);
+    }
+  }
+
+  makeWallUp(){
+    this.mouse.emit(false);
     this.isWall = true;
     this.send.emit([this.i,this.j]);
   }

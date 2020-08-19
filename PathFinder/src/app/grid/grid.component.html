@@ -8,6 +8,6 @@
   <div *ngFor="let column of board" class="row">
     <app-node *ngFor="let node of column" [i]="node.i" [j]="node.j" [isFinish]="node.isFinish" [isStart]="node.isStart"
     [isWall]="node.isWall" [visited]="node.visited" [previousNode]="node.previousNode" [distance]="node.distance" [isPath]="node.isPath"
-    [animated]="node.animated" (send)="showBoard($event)"></app-node>
+    [animated]="node.animated" [mousePressed]="mouseState" (send)="showBoard($event)" (mouse)="changeMouse($event)"></app-node>
   </div>
 </main>

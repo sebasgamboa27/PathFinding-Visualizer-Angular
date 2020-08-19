@@ -13,6 +13,7 @@ export class GridComponent implements OnInit {
   startY: number = 5;
   endX: number = 20;
   endY: number = 20;
+  mouseState: boolean = false;
 
   constructor() { 
 
@@ -41,6 +42,10 @@ export class GridComponent implements OnInit {
         }
       }   
     }
+  }
+
+  changeMouse(state: boolean){
+    this.mouseState = state;
   }
 
   showBoard(numbers: number[]){
