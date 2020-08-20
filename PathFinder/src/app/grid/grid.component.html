@@ -8,6 +8,11 @@
   <button type="button" class="btn btn-primary btn-lg mt-4 ml-3" (click)="showAStar()">A Star Algorithm</button>
   <button type="button" class="btn btn-primary btn-lg mt-4 ml-3" (click)="showBreadth()">Breadth First Search</button>
   <button type="button" class="btn btn-primary btn-lg mt-4 ml-3" (click)="showDepth()">Depth First Search</button>
+  <div class="col" id="text">
+    <h6>Perfomance: {{timeTaken}} ms</h6>
+    <h6>Cells Visited: {{cellsVisited}}</h6>
+    <h6>Correct Path Length: {{pathLength}}</h6>
+  </div>
 </div>
 <main>
   <div *ngFor="let column of board" class="row">

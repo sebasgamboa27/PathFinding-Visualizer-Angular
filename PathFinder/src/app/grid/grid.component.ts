@@ -21,6 +21,11 @@ export class GridComponent implements OnInit {
   DFSPath: NodeComponent[] = [];
   DFSEnded: boolean = false;
 
+
+  timeTaken: number = 0;
+  cellsVisited: number = 0;
+  pathLength: number = 0;
+
   constructor() { 
 
     for (let i = 0; i < 25; i++) {
@@ -56,6 +61,9 @@ export class GridComponent implements OnInit {
     this.openSet = [];
     this.DFSPath = [];
     this.DFSEnded = false;
+    this.timeTaken = 0;
+    this.cellsVisited = 0;
+    this.pathLength = 0;
 
     for (let i = 0; i < 25; i++) {
       let temp = []
@@ -89,6 +97,9 @@ export class GridComponent implements OnInit {
     this.openSet = [];
     this.DFSPath = [];
     this.DFSEnded = false;
+    this.timeTaken = 0;
+    this.cellsVisited = 0;
+    this.pathLength = 0;
 
     for (let i = 0; i < 25; i++) {
       let temp = []
@@ -133,32 +144,52 @@ export class GridComponent implements OnInit {
   }
   
   showDijkstra(){
+
+    const start = performance.now();
     const visitedNodesInOrder = this.dijkstra(this.board, this.board[this.startX][this.startY], this.board[this.endX][this.endY]);
-    console.log(visitedNodesInOrder);
+    const end = performance.now();
+    const time = end-start;
+    console.log(time);
+    this.timeTaken = time;
+    this.cellsVisited = visitedNodesInOrder.length;
     const nodesInShortestPathOrder = this.getNodesInShortestPathOrder(this.board[this.endX][this.endY]);
-    console.log(nodesInShortestPathOrder); 
-    //this.showCorrectPath(nodesInShortestPathOrder);
+    this.pathLength = nodesInShortestPathOrder.length;
     this.animateAll(visitedNodesInOrder, nodesInShortestPathOrder);
   }
 
   showAStar(){
+    const start = performance.now();
     const end = this.aStar(this.board[this.startX][this.startY], this.board[this.endX][this.endY]);
+    const endTime = performance.now();
+    const time = endTime-start;
+    this.timeTaken = time;
+    this.cellsVisited = this.closedSet.length;
     const nodesInShortestPathOrder = this.getNodesInShortestPathOrder(this.board[this.endX][this.endY]);
-    console.log(nodesInShortestPathOrder); 
-    console.log(this.closedSet);
+    this.pathLength = nodesInShortestPathOrder.length;
     this.animateAStar(nodesInShortestPathOrder);
-    //this.showAStarPath();
   }
 
   showBreadth(){
+    const start = performance.now();
     const visitedNodesInOrder = this.BFS(this.board[this.startX][this.startY], this.board[this.endX][this.endY]);
+    const end = performance.now();
+    const time = end-start;
+    this.timeTaken = time;
+    this.cellsVisited = visitedNodesInOrder.length;
     const nodesInShortestPathOrder = this.getNodesInShortestPathOrder(this.board[this.endX][this.endY]);
+    this.pathLength = nodesInShortestPathOrder.length;
     this.animateAll(visitedNodesInOrder, nodesInShortestPathOrder);
   }
 
   showDepth(){
+    const start = performance.now();
     this.DFS(this.board[this.startX][this.startY], this.board[this.endX][this.endY]);
+    const end = performance.now();
+    const time = end-start;
+    this.timeTaken = time;
+    this.cellsVisited = this.DFSPath.length;
     const nodesInShortestPathOrder = this.getNodesInShortestPathOrder(this.board[this.endX][this.endY]);
+    this.pathLength = nodesInShortestPathOrder.length;
     this.animateAll(this.DFSPath, nodesInShortestPathOrder);
   }
 
