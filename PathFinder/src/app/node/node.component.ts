@@ -66,14 +66,14 @@ export class NodeComponent implements OnInit {
   addNeighbors(grid: NodeComponent[][]) {
     var i = this.i;
     var j = this.j;
+    if (j < 40 - 1) {
+      this.neighbors.push(grid[i][j + 1]);
+    }
     if (i < 25 - 1) {
       this.neighbors.push(grid[i + 1][j]);
     }
     if (i > 0) {
       this.neighbors.push(grid[i - 1][j]);
-    }
-    if (j < 40 - 1) {
-      this.neighbors.push(grid[i][j + 1]);
     }
     if (j > 0) {
       this.neighbors.push(grid[i][j - 1]);

@@ -18,6 +18,9 @@ export class GridComponent implements OnInit {
   openSet: NodeComponent[] = [];
   closedSet: NodeComponent[] = [];
 
+  DFSPath: NodeComponent[] = [];
+  DFSEnded: boolean = false;
+
   constructor() { 
 
     for (let i = 0; i < 25; i++) {
@@ -51,6 +54,8 @@ export class GridComponent implements OnInit {
     this.board = [];
     this.closedSet = [];
     this.openSet = [];
+    this.DFSPath = [];
+    this.DFSEnded = false;
 
     for (let i = 0; i < 25; i++) {
       let temp = []
@@ -82,6 +87,8 @@ export class GridComponent implements OnInit {
     this.board = [];
     this.closedSet = [];
     this.openSet = [];
+    this.DFSPath = [];
+    this.DFSEnded = false;
 
     for (let i = 0; i < 25; i++) {
       let temp = []
@@ -131,7 +138,7 @@ export class GridComponent implements OnInit {
     const nodesInShortestPathOrder = this.getNodesInShortestPathOrder(this.board[this.endX][this.endY]);
     console.log(nodesInShortestPathOrder); 
     //this.showCorrectPath(nodesInShortestPathOrder);
-    this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+    this.animateAll(visitedNodesInOrder, nodesInShortestPathOrder);
   }
 
   showAStar(){
@@ -143,13 +150,101 @@ export class GridComponent implements OnInit {
     //this.showAStarPath();
   }
 
+  showBreadth(){
+    const visitedNodesInOrder = this.BFS(this.board[this.startX][this.startY], this.board[this.endX][this.endY]);
+    const nodesInShortestPathOrder = this.getNodesInShortestPathOrder(this.board[this.endX][this.endY]);
+    this.animateAll(visitedNodesInOrder, nodesInShortestPathOrder);
+  }
+
+  showDepth(){
+    this.DFS(this.board[this.startX][this.startY], this.board[this.endX][this.endY]);
+    const nodesInShortestPathOrder = this.getNodesInShortestPathOrder(this.board[this.endX][this.endY]);
+    this.animateAll(this.DFSPath, nodesInShortestPathOrder);
+  }
+
+  BFS(first: NodeComponent, end: NodeComponent){
+
+    for (var i = 0; i < 25; i++) {
+      for (var j = 0; j < 40; j++) {
+        this.board[i][j].addNeighbors(this.board);
+      }
+    }
+
+    let path = [];
+    let queue = [];
+
+    first.visited = true;
+    queue.push(first);
+    path.push(first);
+
+    while(queue.length>0){
+      let current = queue.shift();
+      path.push(current);
+
+      if(current === end){
+        return path;
+      }
+
+      current.neighbors.forEach(adjacent => {
+        if(adjacent.visited === false && !adjacent.isWall){
+          adjacent.visited = true;
+          adjacent.previousNode = current;
+          queue.push(adjacent);
+        }
+      });
+
+    }
+    return path;
+  }
+
+
+  DFS(first: NodeComponent, end: NodeComponent){
+
+    for (var i = 0; i < 25; i++) {
+      for (var j = 0; j < 40; j++) {
+        this.board[i][j].addNeighbors(this.board);
+      }
+    }
+
+    first.visited = true;
+    return this.DFSRecursive(end,first);
+
+  }
+
+  DFSRecursive(end: NodeComponent, current: NodeComponent){
+
+    if(!this.DFSEnded){
+
+      this.DFSPath.push(current);
+
+      console.log(current);
+
+      if(current === end){
+        debugger;
+        this.DFSEnded = true;
+        return this.DFSPath;
+      }
+      else{
+        current.neighbors.forEach(adjacent => {
+          if(adjacent.visited === false && !adjacent.isWall){
+            adjacent.visited = true;
+            adjacent.previousNode = current;
+            this.DFSRecursive(end,adjacent);
+          }
+        });
+      }
+    }
+
+
+  }
+
   showCorrectPath(nodes:NodeComponent[]){
     nodes.forEach(node => {
       node.isPath = true;
     });
   }
 
-  animateDijkstra(visitedNodesInOrder:NodeComponent[], nodesInShortestPathOrder:NodeComponent[]) {
+  animateAll(visitedNodesInOrder:NodeComponent[], nodesInShortestPathOrder:NodeComponent[]) {
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
