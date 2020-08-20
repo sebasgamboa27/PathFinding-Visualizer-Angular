@@ -31,6 +31,7 @@ export class NodeComponent implements OnInit {
 
 
   @Output() send = new EventEmitter<number[]>();
+  @Output() animateAgain = new EventEmitter<boolean>();
 
   @Input() animation: boolean = true;
 
@@ -83,6 +84,7 @@ export class NodeComponent implements OnInit {
   makeWallUp(){
 
     this.mouse.emit([false,false,false]);
+    this.animateAgain.emit(true);
   }
 
   addNeighbors(grid: NodeComponent[][]) {

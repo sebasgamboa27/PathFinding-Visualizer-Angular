@@ -70,6 +70,7 @@ export class GridComponent implements OnInit {
     this.cellsVisited = 0;
     this.pathLength = 0;
     this.animation = true;
+    this.algortithmChosen = 0;
 
     for (let i = 0; i < 25; i++) {
       let temp = []
@@ -107,6 +108,7 @@ export class GridComponent implements OnInit {
     this.cellsVisited = 0;
     this.pathLength = 0;
     this.animation = true;
+    this.algortithmChosen = 0;
 
     for (let i = 0; i < 25; i++) {
       let temp = []
@@ -140,10 +142,6 @@ export class GridComponent implements OnInit {
     this.mouseState = state[0];
     this.dragAndDrop[0] = state[1];
     this.dragAndDrop[1] = state[2];
-    if(!this.dragAndDrop[0]){
-      debugger;
-      this.algortithmChosen = 0;
-    }
   }
 
   showBoard(numbers: number[]){
@@ -163,21 +161,6 @@ export class GridComponent implements OnInit {
       this.startX = numbers[0];
       this.startY = numbers[1];
 
-      if(this.algortithmChosen === 1 && this.mouseState){
-        this.clearBoardWalls();
-        this.animation = false;
-        const start = performance.now();
-        const visitedNodesInOrder = this.dijkstra(this.board, this.board[this.startX][this.startY], this.board[this.endX][this.endY]);
-        const end = performance.now();
-        const time = end-start;
-        console.log(time);
-        this.timeTaken = time;
-        this.cellsVisited = visitedNodesInOrder.length;
-        const nodesInShortestPathOrder = this.getNodesInShortestPathOrder(this.board[this.endX][this.endY]);
-        this.pathLength = nodesInShortestPathOrder.length;
-        this.showCorrectPath(visitedNodesInOrder,nodesInShortestPathOrder);
-        //this.algortithmChosen = 0;
-      }
     }
     else if(numbers[2] === 2){
       this.board[this.endX][this.endY].isFinish = false;
@@ -187,6 +170,25 @@ export class GridComponent implements OnInit {
     }
     
     console.log(this.board);
+  }
+
+  animateAgain(){
+    if(this.algortithmChosen === 1){
+      this.clearBoardWalls();
+      this.showDijkstra();
+    }
+    else if(this.algortithmChosen === 2){
+      this.clearBoardWalls();
+      this.showAStar();
+    }
+    else if(this.algortithmChosen === 3){
+      this.clearBoardWalls();
+      this.showBreadth();
+    }
+    else if(this.algortithmChosen === 4){
+      this.clearBoardWalls();
+      this.showDepth();
+    }
   }
 
   clearBoardPath(){
