@@ -14,6 +14,7 @@ export class GridComponent implements OnInit {
   endX: number = 20;
   endY: number = 35;
   mouseState: boolean = false;
+  dragAndDrop: boolean[] = [false,false];
 
   openSet: NodeComponent[] = [];
   closedSet: NodeComponent[] = [];
@@ -25,6 +26,10 @@ export class GridComponent implements OnInit {
   timeTaken: number = 0;
   cellsVisited: number = 0;
   pathLength: number = 0;
+
+  algortithmChosen: number = 0;
+
+  animation: boolean = true;
 
   constructor() { 
 
@@ -44,11 +49,11 @@ export class GridComponent implements OnInit {
     for (let i = 0; i < this.board.length; i++) {
       for (let j = 0; j < this.board[i].length; j++) {
         if(i === this.startX && j === this.startY){
-          debugger;
+          
           this.board[i][j].isStart = true;
         }
         else if(i === this.endX && j === this.endY){
-          debugger;
+          
           this.board[i][j].isFinish = true;
         }
       }   
@@ -64,6 +69,7 @@ export class GridComponent implements OnInit {
     this.timeTaken = 0;
     this.cellsVisited = 0;
     this.pathLength = 0;
+    this.animation = true;
 
     for (let i = 0; i < 25; i++) {
       let temp = []
@@ -79,11 +85,11 @@ export class GridComponent implements OnInit {
     for (let i = 0; i < this.board.length; i++) {
       for (let j = 0; j < this.board[i].length; j++) {
         if(i === this.startX && j === this.startY){
-          debugger;
+          
           this.board[i][j].isStart = true;
         }
         else if(i === this.endX && j === this.endY){
-          debugger;
+          
           this.board[i][j].isFinish = true;
         }
       }   
@@ -100,6 +106,7 @@ export class GridComponent implements OnInit {
     this.timeTaken = 0;
     this.cellsVisited = 0;
     this.pathLength = 0;
+    this.animation = true;
 
     for (let i = 0; i < 25; i++) {
       let temp = []
@@ -118,29 +125,79 @@ export class GridComponent implements OnInit {
     for (let i = 0; i < this.board.length; i++) {
       for (let j = 0; j < this.board[i].length; j++) {
         if(i === this.startX && j === this.startY){
-          debugger;
+          
           this.board[i][j].isStart = true;
         }
         else if(i === this.endX && j === this.endY){
-          debugger;
+          
           this.board[i][j].isFinish = true;
         }
       }   
     }
   }
 
-  changeMouse(state: boolean){
-    this.mouseState = state;
+  changeMouse(state: boolean[]){
+    this.mouseState = state[0];
+    this.dragAndDrop[0] = state[1];
+    this.dragAndDrop[1] = state[2];
+    if(!this.dragAndDrop[0]){
+      debugger;
+      this.algortithmChosen = 0;
+    }
   }
 
   showBoard(numbers: number[]){
-    if(this.board[numbers[0]][numbers[1]].isWall){
-      this.board[numbers[0]][numbers[1]].isWall = false;
+    
+    if(numbers[2] === null || !this.dragAndDrop[0]){
+      if(this.board[numbers[0]][numbers[1]].isWall){
+        this.board[numbers[0]][numbers[1]].isWall = false;
+      }
+      else{
+        this.board[numbers[0]][numbers[1]].isWall = true;
+      }
     }
-    else{
-      this.board[numbers[0]][numbers[1]].isWall = true;
+
+    else if(numbers[2] === 1 && this.dragAndDrop[0]){
+      this.board[this.startX][this.startY].isStart = false;
+      this.board[numbers[0]][numbers[1]].isStart = true;
+      this.startX = numbers[0];
+      this.startY = numbers[1];
+
+      if(this.algortithmChosen === 1 && this.mouseState){
+        this.clearBoardWalls();
+        this.animation = false;
+        const start = performance.now();
+        const visitedNodesInOrder = this.dijkstra(this.board, this.board[this.startX][this.startY], this.board[this.endX][this.endY]);
+        const end = performance.now();
+        const time = end-start;
+        console.log(time);
+        this.timeTaken = time;
+        this.cellsVisited = visitedNodesInOrder.length;
+        const nodesInShortestPathOrder = this.getNodesInShortestPathOrder(this.board[this.endX][this.endY]);
+        this.pathLength = nodesInShortestPathOrder.length;
+        this.showCorrectPath(visitedNodesInOrder,nodesInShortestPathOrder);
+        //this.algortithmChosen = 0;
+      }
     }
+    else if(numbers[2] === 2){
+      this.board[this.endX][this.endY].isFinish = false;
+      this.board[numbers[0]][numbers[1]].isFinish = true;
+      this.endX = numbers[0];
+      this.endY = numbers[1];
+    }
+    
     console.log(this.board);
+  }
+
+  clearBoardPath(){
+    for (let i = 0; i < this.board.length; i++) {
+      for (let j = 0; j < this.board[i].length; j++) {
+        this.board[i][j].isPath = false;
+        this.board[i][j].animated = false;
+        this.board[i][j].visited = false;           
+      }
+      
+    }
   }
   
   showDijkstra(){
@@ -155,6 +212,8 @@ export class GridComponent implements OnInit {
     const nodesInShortestPathOrder = this.getNodesInShortestPathOrder(this.board[this.endX][this.endY]);
     this.pathLength = nodesInShortestPathOrder.length;
     this.animateAll(visitedNodesInOrder, nodesInShortestPathOrder);
+
+    this.algortithmChosen = 1;
   }
 
   showAStar(){
@@ -167,6 +226,8 @@ export class GridComponent implements OnInit {
     const nodesInShortestPathOrder = this.getNodesInShortestPathOrder(this.board[this.endX][this.endY]);
     this.pathLength = nodesInShortestPathOrder.length;
     this.animateAStar(nodesInShortestPathOrder);
+
+    this.algortithmChosen = 2;
   }
 
   showBreadth(){
@@ -179,6 +240,8 @@ export class GridComponent implements OnInit {
     const nodesInShortestPathOrder = this.getNodesInShortestPathOrder(this.board[this.endX][this.endY]);
     this.pathLength = nodesInShortestPathOrder.length;
     this.animateAll(visitedNodesInOrder, nodesInShortestPathOrder);
+
+    this.algortithmChosen = 3;
   }
 
   showDepth(){
@@ -191,6 +254,8 @@ export class GridComponent implements OnInit {
     const nodesInShortestPathOrder = this.getNodesInShortestPathOrder(this.board[this.endX][this.endY]);
     this.pathLength = nodesInShortestPathOrder.length;
     this.animateAll(this.DFSPath, nodesInShortestPathOrder);
+
+    this.algortithmChosen = 4;
   }
 
   BFS(first: NodeComponent, end: NodeComponent){
@@ -251,7 +316,6 @@ export class GridComponent implements OnInit {
       console.log(current);
 
       if(current === end){
-        debugger;
         this.DFSEnded = true;
         return this.DFSPath;
       }
@@ -269,9 +333,13 @@ export class GridComponent implements OnInit {
 
   }
 
-  showCorrectPath(nodes:NodeComponent[]){
+  showCorrectPath(visitedNodes: NodeComponent[],nodes:NodeComponent[]){
     nodes.forEach(node => {
       node.isPath = true;
+    });
+
+    visitedNodes.forEach(node => {
+      node.animated = true;
     });
   }
 
@@ -376,11 +444,9 @@ export class GridComponent implements OnInit {
   // Backtracks from the finishNode to find the shortest path.
   // Only works when called *after* the dijkstra method above.
   getNodesInShortestPathOrder(finishNode: NodeComponent) {
-    debugger;
     const nodesInShortestPathOrder = [];
     let currentNode = finishNode;
     while (currentNode !== null) {
-      debugger;
       nodesInShortestPathOrder.unshift(currentNode);
       currentNode = currentNode.previousNode;
     }
@@ -388,7 +454,7 @@ export class GridComponent implements OnInit {
   }
 
   removeFromArray(arr, elt) {
-    // Could use indexOf here instead to be more efficient
+    // Could use iOf here instead to be more efficient
     for (var i = arr.length - 1; i >= 0; i--) {
       if (arr[i] == elt) {
         arr.splice(i, 1);
@@ -453,7 +519,6 @@ export class GridComponent implements OnInit {
   
           // Yes, it's a better path
           if (newPath) {
-            debugger;
             neighbor.h = this.heuristic(neighbor, end);
             neighbor.f = neighbor.g + neighbor.h;
             neighbor.previousNode = current;

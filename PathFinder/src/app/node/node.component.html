@@ -3,8 +3,8 @@
 [class.btn-secondary]="!animated && !isFinish && !isStart && !isWall && !isPath"
 [class.btn-success]="isFinish"
 [class.btn-primary]="!isPath && animated"
-[class.node-visited]="!isPath && animated"
+[class.node-visited]="animation && !isPath && animated"
 [class.btn-dark]="isWall"
 [class.btn-warning]="isPath && !isStart && !isFinish"
-[class.node-isPath]="isPath && !isStart && !isFinish"
-(mousedown)="makeWallDown()" (mouseover)="makeWallEnter(false)" (mouseup)="makeWallUp()"></button>
+[class.node-isPath]="animation && isPath && !isStart && !isFinish"
+(mousedown)="makeWallDown()" (mouseover)="makeWallEnter(false,[false,false])" (mouseup)="makeWallUp()"></button>

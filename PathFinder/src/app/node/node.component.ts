@@ -26,10 +26,13 @@ export class NodeComponent implements OnInit {
   @Input() distance: number = Infinity;
 
   @Input() mousePressed: boolean = false;
-  @Output() mouse = new EventEmitter<boolean>();
+  @Input() drag: boolean[] = [false,false];
+  @Output() mouse = new EventEmitter<boolean[]>();
 
 
   @Output() send = new EventEmitter<number[]>();
+
+  @Input() animation: boolean = true;
 
   constructor() { 
   }
@@ -39,28 +42,47 @@ export class NodeComponent implements OnInit {
 
   makeWallDown(){
 
-    this.mouse.emit(true);
-    this.makeWallEnter(true);
+    if(this.isStart){
+      this.mouse.emit([true,true,true]);
+      this.makeWallEnter(true,[true,true]);
+    }
+    else if(this.isFinish){
+      this.mouse.emit([true,true,false]);
+      this.makeWallEnter(true,[true,false]);
+    }
+    else{
+      this.mouse.emit([true,false,false]);
+      this.makeWallEnter(true,[false,false]);
+    }
 
   }
 
-  makeWallEnter(state: boolean){
-    debugger;
-    if(this.mousePressed || state){
+  makeWallEnter(state: boolean,drop: boolean[]){
+    if(this.mousePressed || state || drop[0]){
 
-      if(!this.isWall){
+      let cell = null;
+
+      if(this.drag[0] || drop[0]){
+        if(this.drag[1] || drop[1]){
+          cell = 1;
+        }
+        else{
+          cell = 2;
+        }
+      }
+      else if(!this.isWall && !this.isStart && !this.isFinish){
         this.isWall = true;
       }
       else{
         this.isWall = false;
       }
-      this.send.emit([this.i,this.j]);
+      this.send.emit([this.i,this.j,cell]);
     }
   }
 
   makeWallUp(){
 
-    this.mouse.emit(false);
+    this.mouse.emit([false,false,false]);
   }
 
   addNeighbors(grid: NodeComponent[][]) {
