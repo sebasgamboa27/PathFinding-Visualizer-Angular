@@ -30,6 +30,8 @@ export class GridComponent implements OnInit {
   algortithmChosen: number = 0;
 
   animation: boolean = true;
+  wallAnimation: boolean = false;
+  wallsToAnimate: NodeComponent[] = [];
 
   constructor() { 
 
@@ -60,6 +62,81 @@ export class GridComponent implements OnInit {
     }
   }
 
+  randomMaze(){
+    this.clearBoard();
+    this.wallAnimation = true;
+    for (let i = 0; i < this.board.length; i++) {
+      for (let j = 0; j < this.board[i].length; j++) {
+        let random = Math.floor(Math.random() * (100 - 0)) + 0;
+        if(random<30 && !this.board[i][j].isStart && !this.board[i][j].isFinish){
+          //this.board[i][j].isWall = true;
+          this.wallsToAnimate.push(this.board[i][j]);
+        }
+      }
+    }
+    this.animateWalls(this.wallsToAnimate);
+  }
+
+  recursiveDivisionHorizontal(){
+    this.clearBoard();
+    this.wallAnimation = true;
+    this.RDUtil(40,25,0,0,true,0);
+    this.animateWalls(this.wallsToAnimate);
+
+  }
+
+  recursiveDivisionVertical(){
+    this.clearBoard();
+    this.wallAnimation = true;
+    this.RDUtil(40,25,0,0,false,0);
+    this.animateWalls(this.wallsToAnimate);
+  }
+
+  RDUtil(width: number, height: number, startX: number,startY: number,isHorizontal:boolean,times:number){
+    if (times<7){
+
+
+      //let wix = Math.floor(Math.random() * (width - startX)) + startX;
+      //let wiy = Math.floor(Math.random() * (height - startY)) + startY;
+
+      let wix = Math.floor((width +startX) /2);
+      let wiy = Math.floor((height + startY) /2);
+
+
+      if(isHorizontal){
+        for (let i = startX; i < width; i++) {
+          if(i != wix&&i != wix+1 &&i != wix-1 && !this.board[wiy][i].isStart && !this.board[wiy][i].isFinish){
+            //this.board[wiy][i].isWall = true;
+            this.wallsToAnimate.push(this.board[wiy][i]);
+          }
+        }
+      }
+      else{
+        for (let i = startY; i < height; i++) {
+          if(i != wiy&&i != wiy+1 &&i != wiy-1 && !this.board[i][wix].isStart && !this.board[i][wix].isFinish){
+            //this.board[i][wix].isWall = true;
+            this.wallsToAnimate.push(this.board[i][wix]);
+          }
+        }
+      }
+
+      if(isHorizontal){
+        console.log(wiy);
+        this.RDUtil(width,wiy,startX,startY,!isHorizontal,times+1);
+        debugger;
+        this.RDUtil(width,height,startX,wiy,!isHorizontal,times+1);
+      }
+      else{
+        console.log(wix);
+        this.RDUtil(wix,height,startX,startY,!isHorizontal,times+1);
+        this.RDUtil(width,height,wix,startY,!isHorizontal,times+1);
+      }
+    }
+
+
+  }
+
+
   clearBoard(){
     this.board = [];
     this.closedSet = [];
@@ -71,6 +148,7 @@ export class GridComponent implements OnInit {
     this.pathLength = 0;
     this.animation = true;
     this.algortithmChosen = 0;
+    this.wallsToAnimate = [];
 
     for (let i = 0; i < 25; i++) {
       let temp = []
@@ -109,6 +187,7 @@ export class GridComponent implements OnInit {
     this.pathLength = 0;
     this.animation = true;
     this.algortithmChosen = 0;
+    this.wallsToAnimate = [];
 
     for (let i = 0; i < 25; i++) {
       let temp = []
@@ -386,7 +465,22 @@ export class GridComponent implements OnInit {
       setTimeout(() => {
         const node = nodesInShortestPathOrder[i];
         node.isPath = true;
-      }, 50 * i);
+      }, 40 * i);
+    }
+  }
+
+  animateWalls(walls: NodeComponent[]) {
+    for (let i = 0; i <= walls.length; i++) {
+      setTimeout(() => {
+        if(i!=walls.length){
+          const node = walls[i];
+          node.isWall = true;
+        }
+        else{
+          this.wallAnimation = false;
+        }
+        
+      }, 30 * i);
     }
   }
 
@@ -528,7 +622,6 @@ export class GridComponent implements OnInit {
         }
   
       }
-      // Uh oh, no solution
     } 
     return null;
 

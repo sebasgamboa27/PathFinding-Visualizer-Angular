@@ -5,6 +5,8 @@
 [class.btn-primary]="!isPath && animated"
 [class.node-visited]="animation && !isPath && animated"
 [class.btn-dark]="isWall"
+[class.node-wall]="wallAnimation&&isWall"
 [class.btn-warning]="isPath && !isStart && !isFinish"
 [class.node-isPath]="animation && isPath && !isStart && !isFinish"
+
 (mousedown)="makeWallDown()" (mouseover)="makeWallEnter(false,[false,false])" (mouseup)="makeWallUp()"></button>

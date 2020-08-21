@@ -34,6 +34,7 @@ export class NodeComponent implements OnInit {
   @Output() animateAgain = new EventEmitter<boolean>();
 
   @Input() animation: boolean = true;
+  @Input() wallAnimation: boolean = false;
 
   constructor() { 
   }

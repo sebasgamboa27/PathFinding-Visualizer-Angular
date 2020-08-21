@@ -1,5 +1,15 @@
 <nav class="navbar navbar-info bg-info">
   <span class="navbar-brand mb-0 h1">&nbsp; &nbsp; &nbsp; &nbsp; Welcome! Make walls, and find the shortest path between two points!</span>
+  <div class="dropdown">
+    <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Maze Generator
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+      <button class="dropdown-item" type="button" (click)="randomMaze()">Random Maze</button>
+      <button class="dropdown-item" type="button" (click)="recursiveDivisionHorizontal()">Recursive Division Horizontal</button>
+      <button class="dropdown-item" type="button" (click)="recursiveDivisionVertical()">Recursive Division Vertical</button>
+    </div>
+  </div>
   <button type="button" class="btn btn-dark" (click)="clearBoardWalls()">Clear without walls</button>
   <button type="button" class="btn btn-dark" (click)="clearBoard()">Clear All</button>
 </nav>
@@ -19,7 +29,7 @@
     <app-node *ngFor="let node of column" [i]="node.i" [j]="node.j" [isFinish]="node.isFinish" [isStart]="node.isStart"
     [isWall]="node.isWall" [visited]="node.visited" [previousNode]="node.previousNode" [distance]="node.distance" [isPath]="node.isPath"
     [animated]="node.animated" [mousePressed]="mouseState" [f]="node.f" [g]="node.g" [h]="node.h" [neighbors]="node.neighbors"
-    [drag]="dragAndDrop" [animation]="animation" (send)="showBoard($event)" (mouse)="changeMouse($event)" 
+    [drag]="dragAndDrop" [animation]="animation" [wallAnimation]="wallAnimation" (send)="showBoard($event)" (mouse)="changeMouse($event)" 
     (animateAgain)="animateAgain()"></app-node>
   </div>
 </main>
